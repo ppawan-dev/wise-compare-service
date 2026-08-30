@@ -1,6 +1,7 @@
 package com.cowise.compare.exception;
 
 import java.time.Instant;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import jakarta.validation.ConstraintViolationException;
+
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.context.request.WebRequest;
 
@@ -24,9 +28,23 @@ public class GlobalExceptionHandler {
   @ExceptionHandler({
       MissingServletRequestParameterException.class,
       MethodArgumentTypeMismatchException.class,
-      MethodArgumentNotValidException.class })
+      MethodArgumentNotValidException.class
+  })
   public ResponseEntity<ApiError> handleBadRequest(Exception ex, WebRequest request) {
     return error(HttpStatus.BAD_REQUEST, "The request contains invalid or missing parameters.", request);
+  }
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<ApiError> handleConstraintViolation(ConstraintViolationException ex,
+      WebRequest request) {
+
+    String message = ex.getConstraintViolations().stream()
+        .map(violation -> String.format("%s",
+            // violation.getPropertyPath(),
+            violation.getMessage()))
+        .collect(Collectors.joining("\n"));
+
+    return error(HttpStatus.BAD_REQUEST, message, request);
   }
 
   @ExceptionHandler(HttpStatusCodeException.class)
