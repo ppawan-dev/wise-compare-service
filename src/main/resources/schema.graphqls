@@ -1,0 +1,65 @@
+type Query {
+  compare(
+    amount: Int!
+    sourceCurrency: String!
+    targetCurrency: String!
+  ): ComparisonResponse!
+}
+
+type ComparisonResponse {
+  amount: Float!
+  amountType: String!
+  providerCountry: String
+  providerTypes: [String!]!
+  providers: [Provider!]!
+  sourceCountry: String
+  sourceCurrency: String!
+  targetCountry: String
+  targetCurrency: String!
+}
+
+type Provider {
+  id: ID!
+  alias: String!
+  name: String!
+  quotes: [Quote!]!
+  logos: Logos!
+  partner: Boolean!
+  type: String!
+}
+
+type Quote {
+  dateCollected: String!
+  deliveryEstimation: DeliveryEstimation!
+  fee: Float!
+  isConsideredMidMarketRate: Boolean!
+  markup: Float!
+  rate: Float!
+  receivedAmount: Float
+  sendAmount: Float
+  sourceCountry: String
+  targetCountry: String
+}
+
+type DeliveryEstimation {
+  duration: DurationRange
+  providerGivesEstimate: Boolean!
+}
+
+type DurationRange {
+  min: String
+  max: String
+}
+
+type Logos {
+  normal: Logo!
+  inverse: Logo!
+  white: Logo!
+  circle: Logo!
+  altText: String!
+}
+
+type Logo {
+  svgUrl: String
+  pngUrl: String
+}
