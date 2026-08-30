@@ -60,7 +60,7 @@ The endpoint returns a `ComparisonResponse` JSON object containing comparison da
 
 This is the traditional HTTP-style controller approach, ideal for clients that expect standard REST endpoints and JSON responses.
 
-![Using RESTful](assets\rest.png)
+![Using RESTful](/assets/rest.png)
 
 ---
 
@@ -116,7 +116,7 @@ curl -X POST "http://localhost:8082/api/graphql" \
 
 This GraphQL approach is useful when you want a single query contract with flexible data selection and a schema-driven API.
 
-![Using GraphQL](assets\gql.png)
+![Using GraphQL](/assets/gql.png)
 
 ---
 
