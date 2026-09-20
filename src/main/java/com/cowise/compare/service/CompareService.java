@@ -20,12 +20,11 @@ public class CompareService {
   }
 
   public ResponseEntity<ComparisonResponse> compare(int amount, String sourceCurrency, String targetCurrency) {
-    ResponseEntity<ComparisonResponse> compareResponse = restClient
+    return restClient
         .get()
         .uri("/gateway/v4/comparisons?payInMethod=PISP&sendAmount=" + amount + "&sourceCurrency=" + sourceCurrency
             + "&targetCurrency=" + targetCurrency)
         .retrieve()
         .toEntity(ComparisonResponse.class);
-    return compareResponse;
   }
 }
