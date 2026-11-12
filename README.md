@@ -1,4 +1,4 @@
-# Wise Compare Service
+# <img src="https://wise.com/public-resources/assets/icons/wise-personal/android_chrome_192x192.png" width="32px" height="32px" alt="Wise logo"> Wise Compare Service
 
 A Spring Boot service that compares money transfer offers across currencies and providers. The project exposes the same comparison capability through two controller approaches:
 
