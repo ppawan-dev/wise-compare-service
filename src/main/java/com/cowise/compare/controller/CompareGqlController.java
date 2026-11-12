@@ -1,6 +1,11 @@
 package com.cowise.compare.controller;
 
 import com.cowise.compare.service.CompareService;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +25,10 @@ public class CompareGqlController {
   }
 
   @QueryMapping
-  public ComparisonResponse compare(@Argument int amount, @Argument String sourceCurrency,
-      @Argument String targetCurrency) {
+  public ComparisonResponse compare(
+      @Argument @Min(value = 1, message = "Amount must be greater than zero") int amount,
+      @Argument @NotBlank(message = "Source currency is required") @Pattern(regexp = "^[A-Z]{3}$", message = "Source currency must be a 3-letter ISO code") String sourceCurrency,
+      @Argument @NotBlank(message = "Target currency is required") @Pattern(regexp = "^[A-Z]{3}$", message = "Target currency must be a 3-letter ISO code") String targetCurrency) {
     ResponseEntity<ComparisonResponse> response = compareService.compare(amount, sourceCurrency, targetCurrency);
     return response.getBody();
   }

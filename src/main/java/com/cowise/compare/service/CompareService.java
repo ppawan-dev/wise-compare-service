@@ -20,6 +20,8 @@ public class CompareService {
   }
 
   public ResponseEntity<ComparisonResponse> compare(int amount, String sourceCurrency, String targetCurrency) {
+    logger.info("Fetching currency compare from {} to {} for Amount: {}", sourceCurrency.toUpperCase(),
+        targetCurrency.toUpperCase(), amount);
     return restClient
         .get()
         .uri("/gateway/v4/comparisons?payInMethod=PISP&sendAmount=" + amount + "&sourceCurrency=" + sourceCurrency
