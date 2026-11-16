@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Pattern;
 
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -29,7 +28,6 @@ public class CompareGqlController {
       @Argument @Min(value = 1, message = "Amount must be greater than zero") int amount,
       @Argument @NotBlank(message = "Source currency is required") @Pattern(regexp = "^[A-Z]{3}$", message = "Source currency must be a 3-letter ISO code") String sourceCurrency,
       @Argument @NotBlank(message = "Target currency is required") @Pattern(regexp = "^[A-Z]{3}$", message = "Target currency must be a 3-letter ISO code") String targetCurrency) {
-    ResponseEntity<ComparisonResponse> response = compareService.compare(amount, sourceCurrency, targetCurrency);
-    return response.getBody();
+    return compareService.compare(amount, sourceCurrency, targetCurrency);
   }
 }

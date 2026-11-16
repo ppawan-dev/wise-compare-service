@@ -9,7 +9,6 @@ import com.cowise.compare.dto.ComparisonResponse;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClient;
 
 class CompareServiceTest {
@@ -37,13 +36,13 @@ class CompareServiceTest {
                 "/gateway/v4/comparisons?payInMethod=PISP&sendAmount=100&sourceCurrency=USD&targetCurrency=EUR"))
                 .thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.toEntity(ComparisonResponse.class)).thenReturn(ResponseEntity.ok(expected));
+        when(responseSpec.body(ComparisonResponse.class)).thenReturn(expected);
 
         CompareService service = new CompareService(restClient);
 
-        ResponseEntity<ComparisonResponse> result = service.compare(100, "USD", "EUR");
+        ComparisonResponse result = service.compare(100, "USD", "EUR");
 
-        assertEquals(expected, result.getBody());
+        assertEquals(expected, result);
         verify(restClient).get();
         verify(requestHeadersUriSpec).uri(
                 "/gateway/v4/comparisons?payInMethod=PISP&sendAmount=100&sourceCurrency=USD&targetCurrency=EUR");
