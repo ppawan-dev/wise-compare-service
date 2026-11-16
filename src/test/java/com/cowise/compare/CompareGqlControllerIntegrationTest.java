@@ -10,7 +10,6 @@ import com.cowise.compare.service.CompareService;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
 
 class CompareGqlControllerIntegrationTest {
 
@@ -28,7 +27,7 @@ class CompareGqlControllerIntegrationTest {
         "GB",
         "EUR");
 
-    when(compareService.compare(100, "USD", "EUR")).thenReturn(ResponseEntity.ok(response));
+    when(compareService.compare(100, "USD", "EUR")).thenReturn(response);
 
     CompareGqlController controller = new CompareGqlController(compareService);
     ComparisonResponse result = controller.compare(100, "USD", "EUR");

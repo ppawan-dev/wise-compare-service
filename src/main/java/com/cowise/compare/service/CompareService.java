@@ -2,15 +2,14 @@ package com.cowise.compare.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import com.cowise.compare.dto.ComparisonResponse;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import io.github.resilience4j.retry.annotation.Retry;
+// import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+// import io.github.resilience4j.retry.annotation.Retry;
 
 @Service
 public class CompareService {
@@ -26,7 +25,7 @@ public class CompareService {
   @CircuitBreaker(name = "COMPARE_SERVICE")
   // @Retry(name = "COMPARE_SERVICE")
   // @RateLimiter(name = "COMPARE_SERVICE")
-  public ResponseEntity<ComparisonResponse> compare(int amount, String sourceCurrency, String targetCurrency) {
+  public ComparisonResponse compare(int amount, String sourceCurrency, String targetCurrency) {
     logger.info("Fetching currency compare from {} to {} for Amount: {}", sourceCurrency.toUpperCase(),
         targetCurrency.toUpperCase(), amount);
     return restClient
@@ -34,7 +33,7 @@ public class CompareService {
         .uri("/gateway/v4/comparisons?payInMethod=PISP&sendAmount=" + amount + "&sourceCurrency=" + sourceCurrency
             + "&targetCurrency=" + targetCurrency)
         .retrieve()
-        .toEntity(ComparisonResponse.class);
+        .body(ComparisonResponse.class);
   }
 
   public String compareFallback(Exception e) {
