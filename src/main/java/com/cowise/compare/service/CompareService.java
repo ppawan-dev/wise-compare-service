@@ -8,6 +8,10 @@ import org.springframework.web.client.RestClient;
 
 import com.cowise.compare.dto.ComparisonResponse;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
+
 @Service
 public class CompareService {
 
@@ -19,6 +23,9 @@ public class CompareService {
     this.restClient = restClient;
   }
 
+  @CircuitBreaker(name = "COMPARE_SERVICE")
+  // @Retry(name = "COMPARE_SERVICE")
+  // @RateLimiter(name = "COMPARE_SERVICE")
   public ResponseEntity<ComparisonResponse> compare(int amount, String sourceCurrency, String targetCurrency) {
     logger.info("Fetching currency compare from {} to {} for Amount: {}", sourceCurrency.toUpperCase(),
         targetCurrency.toUpperCase(), amount);
@@ -28,5 +35,9 @@ public class CompareService {
             + "&targetCurrency=" + targetCurrency)
         .retrieve()
         .toEntity(ComparisonResponse.class);
+  }
+
+  public String compareFallback(Exception e) {
+    return e.getMessage();
   }
 }
